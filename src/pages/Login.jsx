@@ -66,7 +66,7 @@ const Label = styled.label`
 	margin-bottom: 0.5rem;
 `
 
-function LoginForm() {
+function Login() {
 	const [email, setEmail] = useState('jonas@example.com')
 	const [password, setPassword] = useState('pass0987')
 	const { login, isLoading } = useLogin()
@@ -128,4 +128,4 @@ function LoginForm() {
 		</LoginContainer>
 	)
 }
-export default LoginForm
+export default Login
