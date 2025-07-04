@@ -1,11 +1,15 @@
+// import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { formatCurrency } from '../../utils/helpers'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteCabin } from '../../services/apiCabins'
-import toast from 'react-hot-toast'
-import { useState } from 'react'
 import CreateCabinForm from './CreateCabinForm'
+import { useDeleteCabin } from './useDeleteCabin'
+import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2'
+import { useCreateCabin } from './useCreateCabin'
+import Modal from '../../ui/Modal'
+import ConfirmDelete from '../../ui/ConfirmDelete'
+import Table from '../../ui/Table'
+import Menus from '../../ui/Menus'
 
 const CabinName = styled.div`
 	font-size: 1.6rem;
@@ -25,17 +29,6 @@ const Discount = styled.div`
 	color: var(--color-green-700);
 `
 
-const TableRow = styled.div`
-	display: grid;
-	grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-	column-gap: 2.4rem;
-	align-items: center;
-	padding: 1.4rem 2.4rem;
-	&:not(:last-child) {
-		border-bottom: 1px solid var(--color-grey-100);
-	}
-`
-
 const Img = styled.img`
 	display: block;
 	width: 6.4rem;
@@ -46,20 +39,10 @@ const Img = styled.img`
 `
 
 function CabinRow({ cabin }) {
-	const [showForm, setShowForm] = useState(false)
-	const queryClient = useQueryClient()
+	const { isDeleting, deleteCabin } = useDeleteCabin()
+	const { isCreating, createCabin } = useCreateCabin()
 
-	const { isLoading: isDeleting, mutate } = useMutation({
-		mutationFn: deleteCabin,
-		onSuccess: () => {
-			toast.success('Cabin successfully deleted')
-			queryClient.invalidateQueries({ queryKey: ['cabins'] })
-		},
-		onError: (err) => {
-			toast.error(err.message)
-		},
-	})
-
+	// Early return for invalid cabin data
 	if (!cabin || typeof cabin !== 'object') {
 		console.warn('CabinRow received invalid cabin prop:', cabin)
 		return null
@@ -72,37 +55,71 @@ function CabinRow({ cabin }) {
 		regularPrice = 0,
 		discount = 0,
 		image = '',
+		description = '',
 	} = cabin
 
-	console.log('🧩 Cabin data passed to CreateCabinForm:', cabin)
+	function handleDuplicate() {
+		createCabin({
+			name: `Copy of ${name}`,
+			maxCapacity,
+			regularPrice,
+			discount,
+			image,
+			description,
+		})
+	}
 
 	return (
-		<>
-			<TableRow>
-				<Img src={image} alt={`Image of ${name}`} />
-				<CabinName>{name}</CabinName>
-				<div>
-					Fits up to {maxCapacity} guest{maxCapacity !== 1 ? 's' : ''}
-				</div>
-				<Price>{formatCurrency(regularPrice)}</Price>
-				<Discount>{discount > 0 ? formatCurrency(discount) : '—'}</Discount>
-
-				<div>
-					<button onClick={() => setShowForm((s) => !s)}>Edit</button>
-					<button onClick={() => mutate(cabinId)} disabled={isDeleting}>
-						{isDeleting ? 'Deleting...' : 'Delete'}
-					</button>
-				</div>
-			</TableRow>
-
-			{showForm && (
-				<CreateCabinForm
-					key={cabin.id}
-					cabinToEdit={cabin}
-					onCloseForm={() => setShowForm(false)}
-				/>
+		<Table.Row>
+			<Img src={image} alt={`Image of ${name}`} />
+			<CabinName>{name}</CabinName>
+			<div>
+				Fits up to {maxCapacity} guest{maxCapacity !== 1 ? 's' : ''}
+			</div>
+			<Price>{formatCurrency(regularPrice)}</Price>
+			{discount ? (
+				<Discount>{formatCurrency(discount)}</Discount>
+			) : (
+				<span>&mdash;</span>
 			)}
-		</>
+			<div>
+				<Modal>
+					<Menus.Menu>
+						<Menus.Toggle id={cabinId} />
+						<Menus.List id={cabinId}>
+							<Menus.Button
+								icon={<HiSquare2Stack />}
+								onClick={handleDuplicate}
+								disabled={isCreating}
+							>
+								Duplicate
+							</Menus.Button>
+
+							<Modal.Open opens='edit'>
+								<Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+							</Modal.Open>
+
+							<Modal.Open opens='delete'>
+								<Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+							</Modal.Open>
+						</Menus.List>
+					</Menus.Menu>
+
+					<Modal.Window name='edit'>
+						<CreateCabinForm cabinToEdit={cabin} onCloseForm={close} />
+					</Modal.Window>
+
+					<Modal.Window name='delete'>
+						<ConfirmDelete
+							resourceName='cabins'
+							disabled={isDeleting}
+							onConfirm={() => deleteCabin(cabinId)}
+							onCloseModal={() => {}}
+						/>
+					</Modal.Window>
+				</Modal>
+			</div>
+		</Table.Row>
 	)
 }
 
@@ -115,7 +132,7 @@ CabinRow.propTypes = {
 		discount: PropTypes.number,
 		image: PropTypes.string,
 		description: PropTypes.string,
-	}),
+	}).isRequired,
 }
 
 export default CabinRow

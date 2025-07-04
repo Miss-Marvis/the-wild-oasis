@@ -50,22 +50,18 @@ const Button = styled.button`
 	border-radius: var(--border-radius-sm);
 	box-shadow: var(--shadow-sm);
 
-	${(props) => sizes[props.size]}
-	${(props) => variations[props.variation]}
-
+	${(props) => sizes[props.$size || 'medium']}
+	${(props) => variations[props.$variation || 'primary']}
 
 	&:disabled {
 		cursor: not-allowed;
 		opacity: 0.6;
 	}
-
-	${(props) => sizes[props.size || 'medium']}
-
-	${(props) => variations[props.variation || 'primary']}
 `
+
 Button.defaultProps = {
-	variation: 'primary',
-	size: 'medium',
+	$variation: 'primary',
+	$size: 'medium',
 }
 
 export default Button
