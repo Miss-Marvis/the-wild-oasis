@@ -95,9 +95,11 @@ real-time dashboard analytics.
    cd hotel-booking-app
    ```
 
+   Netlify live view - https://wood-craft-hotel.netlify.app
+
 2. **Install dependencies**
    ```bash
    npm install
    ```
 
-**Built with ❤️ by [Wondikom Marvis]**
+**Built with ❤️ by Wondikom Marvis**
