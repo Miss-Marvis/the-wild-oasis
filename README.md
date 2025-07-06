@@ -4,8 +4,6 @@ A modern, full-stack hotel booking and management application built with
 Next.js, featuring comprehensive booking management, staff authentication, and
 real-time dashboard analytics.
 
-![App Screenshot](./screenshots/dashboard.png)
-
 ## 🌟 Features
 
 ### 📊 Dashboard & Analytics
@@ -46,8 +44,6 @@ real-time dashboard analytics.
 - Flexible booking duration limits (min/max nights)
 - Maximum guests per booking settings
 - Dark mode toggle for enhanced user experience
-
-![Features Overview](./screenshots/features.png)
 
 ## 🚀 Tech Stack
 
@@ -92,7 +88,7 @@ real-time dashboard analytics.
 
    ```bash
    git clone https://github.com/Miss-Marvis/the-wild-oasis
-   cd hotel-booking-app
+
    ```
 
    Netlify live view - https://wood-craft-hotel.netlify.app
