@@ -74,19 +74,19 @@ real-time dashboard analytics.
 
 ### Dashboard
 
-![Dashboard](./screenshots/dashboard.png)
+![Dashboard](./public/screenshots/dashboard.png)
 
 ### Cabin Management
 
-![Cabin Management](./screenshots/cabins.png)
+![Cabin Management](./public/screenshots/cabins.png)
 
 ### Booking Overview
 
-![Booking Management](./screenshots/bookings.png)
+![Booking Management](./public/screenshots/bookings.png)
 
 ### User Authentication
 
-![Login Screen](./screenshots/login.png)
+![Login Screen](./public/screenshots/login.png)
 
 1. **Clone the repository**
 
