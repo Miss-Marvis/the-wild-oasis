@@ -12,7 +12,7 @@ real-time dashboard analytics.
 - Interactive charts showing daily hotel sales with breakdown of total vs.
   breakfast sales
 - Guest check-in/check-out management for current day operations
-- Key performance metrics for the last 7, 30, and 90 days
+- Key performance metrics for the last 7, 30, and 90 days.
 
 ### 🏨 Cabin Management
 
