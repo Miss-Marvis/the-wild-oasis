@@ -3,3 +3,6 @@
 
 [functions]
   node_bundler = "esbuild"
+  # Ensure Node.js environment
+  [functions.environment]
+    NODE_ENV = "production"
